@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 public class CSVReader {
 	
-//	 public static void main(String[] args) {
 	
 	 public static ArrayList<StockDataItem> GetDataset(){	
 	        String csvFile = "G:\\MEng\\SW Design Methodologies\\Project\\Sampledatashort.csv";
