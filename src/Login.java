@@ -1,11 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class Login extends JFrame implements ActionListener
-{
-	JButton SUBMIT;
-	  JPanel panel;
+public class Login extends JFrame implements ActionListener {
+	  JButton SUBMIT;
+	  JPanel panel,panel1;
 	  JLabel label1,label2;
 	  final JTextField  text1,text2;
 	   Login()
@@ -28,22 +28,20 @@ public class Login extends JFrame implements ActionListener
 	   panel.add(SUBMIT);
 	   add(panel,BorderLayout.CENTER);
 	   SUBMIT.addActionListener(this);
-	   setTitle("LOGIN FORM");
+	   setTitle("Stock Analysis Software User Authenticator");
 	   }
-	  public void actionPerformed(ActionEvent ae)
+	   public void actionPerformed(ActionEvent ae)
 	   {
 	   String value1=text1.getText();
 	   String value2=text2.getText();
-	   if (value1.equals("roseindia") && value2.equals("roseindia")) {
-	   NextPage page=new NextPage();
-	  // page.setSize(300,100);
-	   page.pack();
-	   page.setLocationRelativeTo(null);
-	   
-	   page.setVisible(true);
-	   JLabel label = new JLabel("Welcome to Stock Analysis System");
-	   page.getContentPane().add(label);
-	   dispose();
+	   if (value1.equals("roseindia") && value2.equals("roseindia"))
+	   {
+		   FirstClass f=new FirstClass();
+		   f.setVisible(true);
+		   f.setSize(300,100);
+		   f.pack();
+		   f.setLocationRelativeTo(null);
+		   dispose();
 	   }
 	   else{
 	   System.out.println("enter the valid username and password");
@@ -51,4 +49,17 @@ public class Login extends JFrame implements ActionListener
 	   "Error",JOptionPane.ERROR_MESSAGE);
 	   }
 	 }
+	   public static void main(String args[])
+	   {
+	   try
+	   {
+	   Login frame=new Login();
+	   frame.setSize(300,100);
+	   frame.pack();
+	   frame.setLocationRelativeTo(null);
+	   frame.setVisible(true);
+	   }
+	   catch(Exception e)
+	   {JOptionPane.showMessageDialog(null, e.getMessage());}
+	   }
 }
