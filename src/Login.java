@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Login extends JFrame implements ActionListener {
+	
 	  JButton SUBMIT;
 	  JPanel panel,panel1;
 	  JLabel label1,label2;
@@ -30,6 +31,8 @@ public class Login extends JFrame implements ActionListener {
 	   SUBMIT.addActionListener(this);
 	   setTitle("Stock Analysis Software User Authenticator");
 	   }
+	   
+	   
 	   public void actionPerformed(ActionEvent ae)
 	   {
 	   String value1=text1.getText();
@@ -49,6 +52,7 @@ public class Login extends JFrame implements ActionListener {
 	   "Error",JOptionPane.ERROR_MESSAGE);
 	   }
 	 }
+	   
 	   public static void main(String args[])
 	   {
 	   try

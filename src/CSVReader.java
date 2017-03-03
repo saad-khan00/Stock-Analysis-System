@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class CSVReader {
 	
 	
-	 public static ArrayList<StockDataItem> GetDataset(){	
-	        String csvFile = "G:\\MEng\\SW Design Methodologies\\Project\\Sampledatashort.csv";
+	 public ArrayList<StockDataItem> GetDataset(String csvFile)
+	 {	
 	        BufferedReader br = null;
 	        String line = "";
 	        String cvsSplitBy = ",";

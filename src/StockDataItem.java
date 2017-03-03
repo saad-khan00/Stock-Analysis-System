@@ -1,7 +1,10 @@
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class StockDataItem {
 
-	public String Date;
+	public Date Date;
 	public String Open;
 	public String High;
 	public String Low;
@@ -12,7 +15,17 @@ public class StockDataItem {
 	
 	public StockDataItem(String d, String o, String h, String l, String c,String v,String Ac)
 	{
-		this.Date=d;
+		try
+		{
+			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+			this.Date = df.parse(d);
+		}
+		catch(Exception ex)
+		{
+			System.out.println(ex);
+			this.Date= new Date(Long.MIN_VALUE);
+		}
+		
 		this.Open=o;
 		this.High=h;
 		this.Low=l;
@@ -22,27 +35,5 @@ public class StockDataItem {
 		
 	}
 	
-	public int GetDay()
-	{
-		try
-		{
-			return Integer.parseInt(this.Date.split("/")[1]);
-		}
-		catch (Exception e) {
-			// TODO: handle exception
-			System.out.println(e.toString());
-		}
-		return 0;
-	}
-	public int GetMonth()
-	{
-		return Integer.parseInt(this.Date.split("/")[0]);
-		
-	}
-	public int GetYear()
-	{
-		return Integer.parseInt(this.Date.split("/")[2]);
-		
-	}
 
 }

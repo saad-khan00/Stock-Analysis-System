@@ -1,6 +1,13 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.*;
+
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.ui.RefineryUtilities;
 
 public class FirstClass extends JFrame{
 	
@@ -56,6 +63,7 @@ public class FirstClass extends JFrame{
 	    
 	    //add first button
 	    JButton button=new JButton("Display Graph");
+	    button.addActionListener(action1);
 	    button.setVisible(true);
 	    c.gridx=2;
 	    c.gridy=0;
@@ -105,6 +113,7 @@ public class FirstClass extends JFrame{
 	    
 	    //add second button
 	    JButton button1=new JButton("Display Graph");
+	    button1.addActionListener(action2);
 	    button1.setVisible(true);
 	    c.gridx=5;
 	    c.gridy=1;
@@ -154,37 +163,55 @@ public class FirstClass extends JFrame{
 	    c.gridy=2;
 	    panel1.add(button3,c);
 	    
-	    
-	    
-	    
-	    
-	 
-	    
-	   // panel1.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-	    // Add some buttons
-	   // JButton firstButton=new JButton("Display Stock");
-	    //firstButton.setSize(50,20);
-	    //firstButton.getPreferredSize();
-	    //JButton secondButton=new JButton("Display");
-	   // secondButton.getPreferredSize();
-	   // panel1.add( new JButton( "Display Stock" ), BorderLayout.NORTH );
-	  // panel1.add(firstButton);
-	  // panel1.add(secondButton);
-	    //Adding labels and comboboxes(drop down lists)
-	  
-	   
 	}
 
 	  public void createPanel3(){
+		  
 	    panel2 = new JPanel();
 	    panel2.setLayout( new GridLayout() );
 	    panel2.setPreferredSize( new Dimension( 400, 100 ) );
 	    panel2.setMinimumSize( new Dimension( 100, 50 ) );
 
-	    panel2.add( new JLabel( "Graph will be displayed here" ), BorderLayout.NORTH );
-	   // panel3.add( new JTextArea(), BorderLayout.CENTER );
-	}
+	   
+	  }
 
+	  ActionListener action1=new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			StockEntity stock=new StockEntity();
+			stock.FetchHistoricalData();
+			JFreeChart chart= GraphGenerator.Draw(stock.HistoricalData);
+			
+			ChartPanel cp= new ChartPanel(chart);	
+			
+			panel2.removeAll();
+			panel2.add(cp,BorderLayout.CENTER);
+		    panel2.validate();
+		}
+	};
+	
+	ActionListener action2=new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			StockEntity stock=new StockEntity();
+			ArrayList<StockDataItem> data= stock.GetDataByRange("9/18/2016", "10/4/2016");
+			
+			JFreeChart chart= GraphGenerator.Draw(data);
+			
+			ChartPanel cp= new ChartPanel(chart);
+
+			panel2.removeAll();
+			panel2.add(cp,BorderLayout.CENTER);
+		    panel2.validate();
+			
+		}
+	};
+	  
+	  
 	public static void main( String args[] ){
 	    try {
 	        UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
