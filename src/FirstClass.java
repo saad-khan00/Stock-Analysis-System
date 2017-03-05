@@ -1,20 +1,40 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.InvalidObjectException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.swing.*;
 
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.ui.RefineryUtilities;
+
 
 public class FirstClass extends JFrame{
 	
 	private JSplitPane splitPaneV;
 	private JPanel panel1;
 	private JPanel panel2;
-
+	private JTextField txtFromDate;
+	private JTextField txtToDate;
+	private JComboBox<String> cb1;
+	private JComboBox<String> cb2;
+	private JDatePickerImpl datePicker;
+	private JDatePickerImpl datePicker1;
+	private JLabel recoLabel;
+	private ArrayList<StockDataItem> sSMA;
+	private ArrayList<StockDataItem> lSMA;
+	private JButton button4;
 
 	public FirstClass(){
 	    setTitle( "Stock Analysis Application" );
@@ -83,18 +103,28 @@ public class FirstClass extends JFrame{
 	    c.gridy=1;
 	    panel1.add(fromlabel,c);
 	    
-	    //add first textfield
-	    JTextField textfield=new JTextField();
+	  //add first datepicker
+		   
+	    UtilDateModel model = new UtilDateModel();
+	   
+	    Properties p = new Properties();
+	    p.put("text.today", "Today");
+	    p.put("text.month", "Month");
+	    p.put("text.year", "Year");
+	    JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+	    datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
 	    
-	    textfield.setVisible(true);
-	    //textfield.setMinimumSize(textfield.getPreferredSize());
-	   // textfield.setMinimumSize(new Dimension( 70, 10 ));
+	
 	    c.gridx=2;
 	    c.gridy=1;
 	    
 	   // c.weightx=2;
 	    //c.weighty=2;
-	    panel1.add(textfield,c);
+	    panel1.add(datePicker,c);
+	   //String text= datePicker.getJFormattedTextField().getText();
+	   /*if(text="2016-10-04" && "1962-01-02"){
+		   System.out.println();
+	   }*/
 	    
 	    //add third label
 	    JLabel thirdlabel=new JLabel("To");
@@ -103,16 +133,24 @@ public class FirstClass extends JFrame{
 	    c.gridy=1;
 	    panel1.add(thirdlabel,c);
 	    
-	    //add first textfield
-	    JTextField textfield1=new JTextField();
-	    textfield1.setVisible(true);
-	    //textfield.setSize(70,10);
+	  //add second datepicker
+	    UtilDateModel model1 = new UtilDateModel();
+		   
+	    Properties p1 = new Properties();
+	    p1.put("text.today", "Today");
+	    p1.put("text.month", "Month");
+	    p1.put("text.year", "Year");
+	    JDatePanelImpl datePanel1 = new JDatePanelImpl(model1, p1);
+	    datePicker1 = new JDatePickerImpl(datePanel1, new DateLabelFormatter());
+	    
+	    
 	    c.gridx=4;
 	    c.gridy=1;
-	    panel1.add( textfield1,c);
+	    panel1.add( datePicker1 ,c);
+	    
 	    
 	    //add second button
-	    JButton button1=new JButton("Display Graph");
+	    JButton button1=new JButton("Display Selected Interval");
 	    button1.addActionListener(action2);
 	    button1.setVisible(true);
 	    c.gridx=5;
@@ -135,7 +173,7 @@ public class FirstClass extends JFrame{
 	    
 	    //add second combobox for selecting short term moving average
 	    String[] shortMA = { "20","50"};
-	    final JComboBox<String> cb1 = new JComboBox<String>(shortMA);
+	    cb1 = new JComboBox<String>(shortMA);
 	    c.gridx=2;
 	    c.gridy=2;
 	    cb.setVisible(true);
@@ -150,7 +188,7 @@ public class FirstClass extends JFrame{
 	    
 	  //add third combobox for selecting long term moving average
 	    String[] longMA = { "100","200"};
-	    final JComboBox<String> cb2 = new JComboBox<String>(longMA);
+	    cb2 = new JComboBox<String>(longMA);
 	    c.gridx=4;
 	    c.gridy=2;
 	    cb.setVisible(true);
@@ -158,10 +196,40 @@ public class FirstClass extends JFrame{
 	    
 	    //add third button
 	    JButton button3=new JButton("Display MA");
+	    button3.addActionListener(action3);
 	    button3.setVisible(true);
 	    c.gridx=5;
 	    c.gridy=2;
 	    panel1.add(button3,c);
+	    
+	  //add fourth button
+	    button4=new JButton("Take Suggestion");
+	    button4.setVisible(true);
+	    button4.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				StockAnalyzer decider=new StockAnalyzer();
+				String result=decider.MakeDecision(sSMA, lSMA);
+				recoLabel.setText(result);			
+			}
+		});
+	    c.gridx=0;
+	    c.gridy=3;
+	    button4.setEnabled(false);
+	    panel1.add(button4,c);
+	    
+	  //add recommendation label
+	    recoLabel=new JLabel();
+	    recoLabel.setVisible(true);
+	    c.gridx=1;
+	    c.gridy=3;
+	   // recoLabel.setFont(new Font("Serif", Font.PLAIN, 14));
+	    recoLabel.setFont(new Font("Courier New", Font.ITALIC, 14));
+	    recoLabel.setForeground(Color.BLUE);
+	    panel1.add(recoLabel,c);
+	   
 	    
 	}
 
@@ -182,10 +250,16 @@ public class FirstClass extends JFrame{
 		{
 			StockEntity stock=new StockEntity();
 			stock.FetchHistoricalData();
-			JFreeChart chart= GraphGenerator.Draw(stock.HistoricalData);
+			Map<String, ArrayList<StockDataItem>> dataset=new HashMap<String, ArrayList<StockDataItem>>();
+
+			dataset.put("Absolute Data", stock.HistoricalData);
+
+			JFreeChart chart= GraphGenerator.Draw(dataset);
 			
 			ChartPanel cp= new ChartPanel(chart);	
 			
+			button4.setEnabled(false);
+			recoLabel.setText("");
 			panel2.removeAll();
 			panel2.add(cp,BorderLayout.CENTER);
 		    panel2.validate();
@@ -197,19 +271,161 @@ public class FirstClass extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
+			boolean inputValid=true;
 			StockEntity stock=new StockEntity();
-			ArrayList<StockDataItem> data= stock.GetDataByRange("9/18/2016", "10/4/2016");
 			
-			JFreeChart chart= GraphGenerator.Draw(data);
+			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+			Date fromDate;
+			Date toDate;
 			
-			ChartPanel cp= new ChartPanel(chart);
+			df.setLenient(false);
 
 			panel2.removeAll();
-			panel2.add(cp,BorderLayout.CENTER);
+			
+			if(datePicker.getJFormattedTextField().getText().isEmpty() || datePicker1.getJFormattedTextField().getText().isEmpty())
+			{
+				JOptionPane.showMessageDialog(new JFrame(), "Please provide From & To Dates.", "Invalid Date Format",
+				        JOptionPane.ERROR_MESSAGE);
+				inputValid=false;
+			}
+			else
+			{
+				try 
+				{
+					fromDate = df.parse(datePicker.getJFormattedTextField().getText());
+					toDate = df.parse(datePicker1.getJFormattedTextField().getText());
+					if(fromDate.compareTo(toDate)>0)
+					{
+						throw new InvalidObjectException("");
+					}
+				} 
+				catch (ParseException e1) 
+				{
+					JOptionPane.showMessageDialog(new JFrame(), "Please select a valid date.", "Invalid Date Format",
+					        JOptionPane.ERROR_MESSAGE);
+					inputValid=false;
+					
+				}
+				catch(InvalidObjectException e2)
+				{
+					JOptionPane.showMessageDialog(new JFrame(), "From Date cannot be greater than To Date.", "Invalid Dates",
+					        JOptionPane.ERROR_MESSAGE);
+					inputValid=false;
+					
+				}
+			}
+			
+			if(inputValid)
+			{
+				ArrayList<StockDataItem> data= stock.GetDataByRange(datePicker.getJFormattedTextField().getText(),datePicker1.getJFormattedTextField().getText());
+				
+				Map<String, ArrayList<StockDataItem>> dataset=new HashMap<String, ArrayList<StockDataItem>>();
+
+				dataset.put("Absolute Data", data);
+				
+				JFreeChart chart= GraphGenerator.Draw(dataset);
+				
+				ChartPanel cp= new ChartPanel(chart);
+	
+				cp.setBackground(Color.red);
+				
+//				panel2.removeAll();
+				panel2.add(cp,BorderLayout.CENTER);
+			}
+			
+			button4.setEnabled(false);
+			recoLabel.setText("");
 		    panel2.validate();
 			
 		}
 	};
+	
+	ActionListener action3=new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			boolean inputValid=true;
+			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+			Date fromDate;
+			Date toDate;
+			
+			df.setLenient(false);
+
+			panel2.removeAll();
+			
+			if(datePicker.getJFormattedTextField().getText().isEmpty() || datePicker1.getJFormattedTextField().getText().isEmpty())
+			{
+				JOptionPane.showMessageDialog(new JFrame(), "Please provide From & To Dates.", "Invalid Date Format",
+				        JOptionPane.ERROR_MESSAGE);
+				inputValid=false;
+			}
+			else
+			{
+				try 
+				{
+					fromDate = df.parse(datePicker.getJFormattedTextField().getText());
+					toDate = df.parse(datePicker1.getJFormattedTextField().getText());
+					if(fromDate.compareTo(toDate)>0)
+					{
+						throw new InvalidObjectException("");
+					}
+				} 
+				catch (ParseException e1) 
+				{
+					JOptionPane.showMessageDialog(new JFrame(), "Please select a valid date.", "Invalid Date Format",
+					        JOptionPane.ERROR_MESSAGE);
+					inputValid=false;
+					
+				}
+				catch(InvalidObjectException e2)
+				{
+					JOptionPane.showMessageDialog(new JFrame(), "From Date cannot be greater than To Date.", "Invalid Dates",
+					        JOptionPane.ERROR_MESSAGE);
+					inputValid=false;
+					
+				}
+			}
+			
+			if(inputValid)
+			{
+				StockAnalyzer movingAverageFinder=new StockAnalyzer();
+				StockEntity stock=new StockEntity();
+				
+				
+				stock.FetchHistoricalData();
+				
+				String shortTermWindow= cb1.getSelectedItem().toString();
+				String longTermWindow= cb2.getSelectedItem().toString();
+				
+				sSMA = movingAverageFinder.CalculateSMA(Integer.parseInt(shortTermWindow), stock.HistoricalData);
+				lSMA = movingAverageFinder.CalculateSMA(Integer.parseInt(longTermWindow), stock.HistoricalData);
+				
+				Map<String, ArrayList<StockDataItem>> dataset=new HashMap<String, ArrayList<StockDataItem>>();
+		
+				ArrayList<StockDataItem> absData= stock.GetDataByRange(datePicker.getJFormattedTextField().getText(),datePicker1.getJFormattedTextField().getText());
+		
+				sSMA= StockEntity.FilterDataByRange(datePicker.getJFormattedTextField().getText(),datePicker1.getJFormattedTextField().getText(), sSMA);
+				lSMA= StockEntity.FilterDataByRange(datePicker.getJFormattedTextField().getText(),datePicker1.getJFormattedTextField().getText(), lSMA);
+				
+				dataset.put("Absolute Data", absData);
+				dataset.put("SMA("+shortTermWindow+")", sSMA);
+				dataset.put("SMA("+longTermWindow+")", lSMA);
+				
+				JFreeChart chart= GraphGenerator.Draw(dataset);
+				
+				ChartPanel cp= new ChartPanel(chart);
+		
+				cp.setBackground(Color.red);
+				
+				button4.setEnabled(true);
+				recoLabel.setText("");
+				panel2.add(cp,BorderLayout.CENTER);
+			    panel2.validate();
+			}
+		}
+	};
+	  	
 	  
 	  
 	public static void main( String args[] ){

@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class StockEntity {
 
-	String csvFile = "G:\\MEng\\SW Design Methodologies\\Project\\Sampledatashort.csv";
+	String csvFile = "G:\\MEng\\SW Design Methodologies\\Project\\SampledataM.csv";
 	
 	public String name;
     public String filePath="";
@@ -58,5 +58,38 @@ public class StockEntity {
 
 		return filteredData;
 	}
+	
+	public static ArrayList<StockDataItem> FilterDataByRange(String StartDate, String EndDate, ArrayList<StockDataItem> inputData)
+	{
+		ArrayList<StockDataItem> filteredData=new ArrayList<StockDataItem>();
+		
+		try 
+		{
+			
+			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+			
+			Date fromDate = df.parse(StartDate);
+			Date toDate = df.parse(EndDate);
+
+			
+			if(inputData != null)
+			{
+				for (StockDataItem item : inputData) {
+					
+					if(!fromDate.after(item.Date) && !toDate.before(item.Date))
+					{
+						filteredData.add(item);
+					}
+					
+				}
+			}
+		
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		return filteredData;
+	}
+	
 	
 }

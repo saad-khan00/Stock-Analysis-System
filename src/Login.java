@@ -40,10 +40,12 @@ public class Login extends JFrame implements ActionListener {
 	   if (value1.equals("roseindia") && value2.equals("roseindia"))
 	   {
 		   FirstClass f=new FirstClass();
+//		   f.setSize(300,100);
+//		   f.pack();
+//		   f.setLocationRelativeTo(null);
+		   f.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		   f.setUndecorated(false);
 		   f.setVisible(true);
-		   f.setSize(300,100);
-		   f.pack();
-		   f.setLocationRelativeTo(null);
 		   dispose();
 	   }
 	   else{
