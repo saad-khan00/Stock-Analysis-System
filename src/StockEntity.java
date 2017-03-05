@@ -15,8 +15,8 @@ public class StockEntity {
 	{
 		try 
 		{
-			CSVReader reader=new CSVReader();
-			this.HistoricalData= reader.GetDataset(csvFile);
+			DataAccess reader=new DataAccess();
+			this.HistoricalData= reader.GetDataFromCSV(csvFile);
 		} 
 		catch (Exception e) {
 			System.out.println(e);

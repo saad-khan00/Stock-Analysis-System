@@ -20,13 +20,11 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 
 
-public class FirstClass extends JFrame{
+public class MainWindow extends JFrame{
 	
 	private JSplitPane splitPaneV;
 	private JPanel panel1;
 	private JPanel panel2;
-	private JTextField txtFromDate;
-	private JTextField txtToDate;
 	private JComboBox<String> cb1;
 	private JComboBox<String> cb2;
 	private JDatePickerImpl datePicker;
@@ -36,7 +34,7 @@ public class FirstClass extends JFrame{
 	private ArrayList<StockDataItem> lSMA;
 	private JButton button4;
 
-	public FirstClass(){
+	public MainWindow(){
 	    setTitle( "Stock Analysis Application" );
 	    setBackground( Color.gray );
 
@@ -45,9 +43,9 @@ public class FirstClass extends JFrame{
 	    getContentPane().add( topPanel );
 
 	    // Create the panels
-	    createPanel1();
+	    createOptionsPanel();
 	    //createPanel2();
-	    createPanel3();
+	    createChartPanel();
 
 	    // Create a splitter pane
 	    splitPaneV = new JSplitPane( JSplitPane.VERTICAL_SPLIT );
@@ -56,7 +54,7 @@ public class FirstClass extends JFrame{
 	    splitPaneV.setRightComponent( panel2 );
 	}
 
-	public void createPanel1(){
+	public void createOptionsPanel(){
 	    panel1 = new JPanel();
 	    panel1.setLayout( new GridBagLayout() );
 	    panel1.setMinimumSize( new Dimension( 100, 200 ) );//sets minimum size of upper split pane
@@ -74,7 +72,7 @@ public class FirstClass extends JFrame{
 	    panel1.add(label,c);
 	    
 	    //add combobox for selecting given CSV file
-	    String[] choices = { "GIVEN CSV FILE"};
+	    String[] choices = { "ABC Stock"};
 	    final JComboBox<String> cb = new JComboBox<String>(choices);
 	    c.gridx=1;
 	    c.gridy=0;
@@ -82,12 +80,12 @@ public class FirstClass extends JFrame{
 	    panel1.add(cb,c);
 	    
 	    //add first button
-	    JButton button=new JButton("Display Graph");
-	    button.addActionListener(action1);
-	    button.setVisible(true);
-	    c.gridx=2;
-	    c.gridy=0;
-	    panel1.add(button,c);
+//	    JButton button=new JButton("Display Graph");
+//	    button.addActionListener(action1);
+//	    button.setVisible(true);
+//	    c.gridx=2;
+//	    c.gridy=0;
+//	    panel1.add(button,c);
 	    
 	    //add second label
 	    JLabel secondlabel=new JLabel("Select Date Range:");
@@ -150,8 +148,8 @@ public class FirstClass extends JFrame{
 	    
 	    
 	    //add second button
-	    JButton button1=new JButton("Display Selected Interval");
-	    button1.addActionListener(action2);
+	    JButton button1=new JButton("View Stock Chart");
+	    button1.addActionListener(btnClick_ViewChart);
 	    button1.setVisible(true);
 	    c.gridx=5;
 	    c.gridy=1;
@@ -195,26 +193,17 @@ public class FirstClass extends JFrame{
 	    panel1.add(cb2,c);
 	    
 	    //add third button
-	    JButton button3=new JButton("Display MA");
-	    button3.addActionListener(action3);
+	    JButton button3=new JButton("View SMAs");
+	    button3.addActionListener(btnClick_ViewSMAs);
 	    button3.setVisible(true);
 	    c.gridx=5;
 	    c.gridy=2;
 	    panel1.add(button3,c);
 	    
 	  //add fourth button
-	    button4=new JButton("Take Suggestion");
+	    button4=new JButton("Seek Decision");
 	    button4.setVisible(true);
-	    button4.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				StockAnalyzer decider=new StockAnalyzer();
-				String result=decider.MakeDecision(sSMA, lSMA);
-				recoLabel.setText(result);			
-			}
-		});
+	    button4.addActionListener(btnClick_Decision);
 	    c.gridx=0;
 	    c.gridy=3;
 	    button4.setEnabled(false);
@@ -233,7 +222,7 @@ public class FirstClass extends JFrame{
 	    
 	}
 
-	  public void createPanel3(){
+	public void createChartPanel(){
 		  
 	    panel2 = new JPanel();
 	    panel2.setLayout( new GridLayout() );
@@ -243,30 +232,30 @@ public class FirstClass extends JFrame{
 	   
 	  }
 
-	  ActionListener action1=new ActionListener() {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) 
-		{
-			StockEntity stock=new StockEntity();
-			stock.FetchHistoricalData();
-			Map<String, ArrayList<StockDataItem>> dataset=new HashMap<String, ArrayList<StockDataItem>>();
-
-			dataset.put("Absolute Data", stock.HistoricalData);
-
-			JFreeChart chart= GraphGenerator.Draw(dataset);
-			
-			ChartPanel cp= new ChartPanel(chart);	
-			
-			button4.setEnabled(false);
-			recoLabel.setText("");
-			panel2.removeAll();
-			panel2.add(cp,BorderLayout.CENTER);
-		    panel2.validate();
-		}
-	};
+//	ActionListener action1=new ActionListener() {
+//		
+//		@Override
+//		public void actionPerformed(ActionEvent e) 
+//		{
+//			StockEntity stock=new StockEntity();
+//			stock.FetchHistoricalData();
+//			Map<String, ArrayList<StockDataItem>> dataset=new HashMap<String, ArrayList<StockDataItem>>();
+//
+//			dataset.put("Absolute Data", stock.HistoricalData);
+//
+//			JFreeChart chart= GraphGenerator.Draw(dataset);
+//			
+//			ChartPanel cp= new ChartPanel(chart);	
+//			
+//			button4.setEnabled(false);
+//			recoLabel.setText("");
+//			panel2.removeAll();
+//			panel2.add(cp,BorderLayout.CENTER);
+//		    panel2.validate();
+//		}
+//	};
 	
-	ActionListener action2=new ActionListener() {
+	ActionListener btnClick_ViewChart=new ActionListener() {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -340,7 +329,8 @@ public class FirstClass extends JFrame{
 		}
 	};
 	
-	ActionListener action3=new ActionListener() {
+
+	ActionListener btnClick_ViewSMAs=new ActionListener() {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -425,19 +415,28 @@ public class FirstClass extends JFrame{
 			}
 		}
 	};
-	  	
-	  
-	  
-	public static void main( String args[] ){
-	    try {
-	        UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-	    } catch (Exception evt) {}
-	    // Create an instance of the test application
-	    FirstClass mainFrame = new FirstClass();
-	    mainFrame.pack();
-	    mainFrame.setLocationRelativeTo(null);
-	    mainFrame.setVisible( true );
-	    mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-	}
 
+	ActionListener btnClick_Decision =new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			StockAnalyzer decider=new StockAnalyzer();
+			String result=decider.MakeDecision(sSMA, lSMA);
+			recoLabel.setText(result);			
+		}
+	};  
+	  
+//	public static void main( String args[] ){
+//	    try {
+//	        UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+//	    } catch (Exception evt) {}
+//	    // Create an instance of the test application
+//	    MainWindow mainFrame = new MainWindow();
+//	    mainFrame.pack();
+//	    mainFrame.setLocationRelativeTo(null);
+//	    mainFrame.setVisible( true );
+//	    mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+//	}
+//
 }

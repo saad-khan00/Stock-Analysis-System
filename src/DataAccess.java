@@ -4,10 +4,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CSVReader {
+public class DataAccess {
 	
 	
-	 public ArrayList<StockDataItem> GetDataset(String csvFile)
+	 public ArrayList<StockDataItem> GetDataFromCSV(String csvFile)
 	 {	
 	        BufferedReader br = null;
 	        String line = "";
