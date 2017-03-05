@@ -35,23 +35,36 @@ public class LoginWindow extends JFrame implements ActionListener {
 	   
 	   public void actionPerformed(ActionEvent ae)
 	   {
-	   String value1=txtUserName.getText();
-	   String value2=txtPassword.getText();
-	   if ((value1.equals("user1") || value1.equals("user2") || value1.equals("roseindia")) && (value2.equals("roseindia") || value2.equals("123456")))
-	   {
-		   MainWindow f=new MainWindow();
-		   f.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-		   f.setUndecorated(false);
-		   f.setVisible(true);
-		   dispose();
+		   String value1=txtUserName.getText();
+		   String value2=txtPassword.getText();
+		   
+		   if(value1.isEmpty() || value2.isEmpty())
+		   {
+			   JOptionPane.showMessageDialog(new JFrame(), "Please enter a Username and Password.", "Invalid Login",
+				        JOptionPane.ERROR_MESSAGE);
+		   }
+		   else
+		   {
+			   LoginController loginCtrl=new LoginController();
+			   
+			   if(loginCtrl.Login(value1, value2))
+			   {
+				   MainWindow f=new MainWindow();
+				   f.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+				   f.setUndecorated(false);
+				   f.setVisible(true);
+				   dispose();
+				   
+			   }
+			   else
+			   {
+				   JOptionPane.showMessageDialog(this,"Incorrect login or password",
+				   "Error",JOptionPane.ERROR_MESSAGE);
+			   }
+			   
+		   }
+		   
 	   }
-	   else
-	   {
-		   System.out.println("enter the valid username and password");
-		   JOptionPane.showMessageDialog(this,"Incorrect login or password",
-		   "Error",JOptionPane.ERROR_MESSAGE);
-	   }
-	 }
 	   
 	   public static void main(String args[])
 	   {

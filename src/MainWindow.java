@@ -261,7 +261,6 @@ public class MainWindow extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			
 			boolean inputValid=true;
-			StockEntity stock=new StockEntity();
 			
 			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 			Date fromDate;
@@ -306,13 +305,9 @@ public class MainWindow extends JFrame{
 			
 			if(inputValid)
 			{
-				ArrayList<StockDataItem> data= stock.GetDataByRange(datePicker.getJFormattedTextField().getText(),datePicker1.getJFormattedTextField().getText());
+				StockController stockCtrl=new StockController();
 				
-				Map<String, ArrayList<StockDataItem>> dataset=new HashMap<String, ArrayList<StockDataItem>>();
-
-				dataset.put("Absolute Data", data);
-				
-				JFreeChart chart= GraphGenerator.Draw(dataset);
+				JFreeChart chart= stockCtrl.GetStockChartByDateRange(datePicker.getJFormattedTextField().getText(),datePicker1.getJFormattedTextField().getText());
 				
 				ChartPanel cp= new ChartPanel(chart);
 	
@@ -379,33 +374,18 @@ public class MainWindow extends JFrame{
 			
 			if(inputValid)
 			{
-				StockAnalyzer movingAverageFinder=new StockAnalyzer();
-				StockEntity stock=new StockEntity();
-				
-				
-				stock.FetchHistoricalData();
 				
 				String shortTermWindow= cb1.getSelectedItem().toString();
 				String longTermWindow= cb2.getSelectedItem().toString();
 				
-				sSMA = movingAverageFinder.CalculateSMA(Integer.parseInt(shortTermWindow), stock.HistoricalData);
-				lSMA = movingAverageFinder.CalculateSMA(Integer.parseInt(longTermWindow), stock.HistoricalData);
+				StockController stockCtrl=new StockController();
 				
-				Map<String, ArrayList<StockDataItem>> dataset=new HashMap<String, ArrayList<StockDataItem>>();
-		
-				ArrayList<StockDataItem> absData= stock.GetDataByRange(datePicker.getJFormattedTextField().getText(),datePicker1.getJFormattedTextField().getText());
-		
-				sSMA= StockEntity.FilterDataByRange(datePicker.getJFormattedTextField().getText(),datePicker1.getJFormattedTextField().getText(), sSMA);
-				lSMA= StockEntity.FilterDataByRange(datePicker.getJFormattedTextField().getText(),datePicker1.getJFormattedTextField().getText(), lSMA);
+				JFreeChart chart= stockCtrl.DisplayChartWithSMA(datePicker.getJFormattedTextField().getText(), datePicker1.getJFormattedTextField().getText(), shortTermWindow, longTermWindow);
 				
-				dataset.put("Absolute Data", absData);
-				dataset.put("SMA("+shortTermWindow+")", sSMA);
-				dataset.put("SMA("+longTermWindow+")", lSMA);
-				
-				JFreeChart chart= GraphGenerator.Draw(dataset);
+				sSMA= stockCtrl.sSMADataset;
+				lSMA= stockCtrl.lSMADataset;
 				
 				ChartPanel cp= new ChartPanel(chart);
-		
 				cp.setBackground(Color.red);
 				
 				button4.setEnabled(true);
@@ -421,22 +401,13 @@ public class MainWindow extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			StockAnalyzer decider=new StockAnalyzer();
-			String result=decider.MakeDecision(sSMA, lSMA);
-			recoLabel.setText(result);			
+			
+			StockController stockCtrl=new StockController();
+			String decision= stockCtrl.DecideBuyOrSell(sSMA,lSMA);
+
+			recoLabel.setText(decision);			
 		}
 	};  
 	  
-//	public static void main( String args[] ){
-//	    try {
-//	        UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-//	    } catch (Exception evt) {}
-//	    // Create an instance of the test application
-//	    MainWindow mainFrame = new MainWindow();
-//	    mainFrame.pack();
-//	    mainFrame.setLocationRelativeTo(null);
-//	    mainFrame.setVisible( true );
-//	    mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-//	}
-//
+
 }
