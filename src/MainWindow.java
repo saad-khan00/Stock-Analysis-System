@@ -80,12 +80,12 @@ public class MainWindow extends JFrame{
 	    panel1.add(cb,c);
 	    
 	    //add first button
-//	    JButton button=new JButton("Display Graph");
-//	    button.addActionListener(action1);
-//	    button.setVisible(true);
-//	    c.gridx=2;
-//	    c.gridy=0;
-//	    panel1.add(button,c);
+	    JButton button=new JButton("Display Graph");
+	    button.addActionListener(action1);
+	    button.setVisible(true);
+	    c.gridx=2;
+	    c.gridy=0;
+	    panel1.add(button,c);
 	    
 	    //add second label
 	    JLabel secondlabel=new JLabel("Select Date Range:");
@@ -232,28 +232,28 @@ public class MainWindow extends JFrame{
 	   
 	  }
 
-//	ActionListener action1=new ActionListener() {
-//		
-//		@Override
-//		public void actionPerformed(ActionEvent e) 
-//		{
-//			StockEntity stock=new StockEntity();
-//			stock.FetchHistoricalData();
-//			Map<String, ArrayList<StockDataItem>> dataset=new HashMap<String, ArrayList<StockDataItem>>();
-//
-//			dataset.put("Absolute Data", stock.HistoricalData);
-//
-//			JFreeChart chart= GraphGenerator.Draw(dataset);
-//			
-//			ChartPanel cp= new ChartPanel(chart);	
-//			
-//			button4.setEnabled(false);
-//			recoLabel.setText("");
-//			panel2.removeAll();
-//			panel2.add(cp,BorderLayout.CENTER);
-//		    panel2.validate();
-//		}
-//	};
+	ActionListener action1=new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			StockEntity stock=new StockEntity();
+			stock.FetchHistoricalData();
+			Map<String, ArrayList<StockDataItem>> dataset=new HashMap<String, ArrayList<StockDataItem>>();
+
+			dataset.put("Absolute Data", stock.HistoricalData);
+
+			JFreeChart chart= GraphGenerator.Draw(dataset);
+			
+			ChartPanel cp= new ChartPanel(chart);	
+			
+			button4.setEnabled(false);
+			recoLabel.setText("");
+			panel2.removeAll();
+			panel2.add(cp,BorderLayout.CENTER);
+		    panel2.validate();
+		}
+	};
 	
 	ActionListener btnClick_ViewChart=new ActionListener() {
 		
@@ -262,7 +262,7 @@ public class MainWindow extends JFrame{
 			
 			boolean inputValid=true;
 			
-			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			Date fromDate;
 			Date toDate;
 			
@@ -331,7 +331,7 @@ public class MainWindow extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			
 			boolean inputValid=true;
-			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			Date fromDate;
 			Date toDate;
 			

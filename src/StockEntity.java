@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class StockEntity {
 
-	String csvFile = "G:\\MEng\\SW Design Methodologies\\Project\\SampledataM.csv";
+	String csvFile = "Datasource/Sampledata.csv";
 	
 	public String name;
     public String filePath="";
@@ -34,7 +34,7 @@ public class StockEntity {
 				FetchHistoricalData();
 			}
 
-			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			
 			Date fromDate = df.parse(StartDate);
 			Date toDate = df.parse(EndDate);
@@ -66,7 +66,7 @@ public class StockEntity {
 		try 
 		{
 			
-			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			
 			Date fromDate = df.parse(StartDate);
 			Date toDate = df.parse(EndDate);

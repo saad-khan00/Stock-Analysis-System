@@ -17,7 +17,7 @@ public class StockDataItem {
 	{
 		try
 		{
-			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			this.Date = df.parse(d);
 		}
 		catch(Exception ex)
